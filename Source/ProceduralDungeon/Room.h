@@ -26,59 +26,30 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
-	void initialize(FStructForRoom s);
+	UPROPERTY(EditAnywhere , Category = "room size | length")
+	float minx = 1.;
+
+	UPROPERTY(EditAnywhere, Category = "room size | length")
+	float maxx = 1.;
+
+	UPROPERTY(EditAnywhere, Category = "room size | width")
+	float miny = 1.;
+
+	UPROPERTY(EditAnywhere, Category = "room size | width")
+	float maxy = 1.;
+
+	bool isabigroom=false;
+
+	UPROPERTY(EditAnywhere)
+	UMaterialInterface* mat;
 	
-protected :
+	void setsize(int x, int y);
 
-
-
-	UPROPERTY(EditAnywhere, Category = "room components")
-	USceneComponent* scenecomp;
-
-	UPROPERTY(EditAnywhere, Category = "room components")
-	USceneComponent* geocomp;
-
-	UPROPERTY(EditAnywhere, Category = "room components")
-	USceneComponent* overlapcomp;
 
 	//UPROPERTY(VisibleAnywhere, Category = "room components")
 	UPROPERTY(EditAnywhere, Category = "room components")
-	UStaticMeshComponent* wall_1;
+	UStaticMeshComponent* room;
 
-	//UPROPERTY(VisibleAnywhere, Category = "room components")
-	UPROPERTY(EditAnywhere, Category = "room components")
-	UStaticMeshComponent* wall_2;
 
-	//UPROPERTY(VisibleAnywhere, Category = "room components")
-	UPROPERTY(EditAnywhere, Category = "room components")
-	UStaticMeshComponent* wall_3;
-
-	//UPROPERTY(VisibleAnywhere, Category = "room components")
-	UPROPERTY(EditAnywhere, Category = "room components")
-	UStaticMeshComponent* wall_4;
-
-	//UPROPERTY(VisibleAnywhere, Category = "room components")
-	UPROPERTY(EditAnywhere, Category = "room components")
-	UStaticMeshComponent* wall_5;
-
-	//UPROPERTY(VisibleAnywhere, Category = "room components")
-	UPROPERTY(EditAnywhere, Category = "room components")
-	UStaticMeshComponent* wall_6;
-
-	//UPROPERTY(VisibleAnywhere, Category = "room components")
-	UPROPERTY(EditAnywhere, Category = "room components")
-	UStaticMeshComponent* wall_7;
-
-	//UPROPERTY(VisibleAnywhere, Category = "room components")
-	UPROPERTY(EditAnywhere, Category = "room components")
-	UStaticMeshComponent* wall_8;
-
-	//UPROPERTY(VisibleAnywhere, Category = "room components")
-	UPROPERTY(EditAnywhere, Category = "room components")
-	UStaticMeshComponent* floor;
-
-	//UPROPERTY(VisibleAnywhere, Category = "room components")
-	UPROPERTY(EditAnywhere, Category = "room components")
-	UBoxComponent* collision_box;
 
 };

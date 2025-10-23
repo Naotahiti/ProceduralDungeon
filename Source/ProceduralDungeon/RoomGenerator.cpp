@@ -3,6 +3,7 @@
 
 #include "RoomGenerator.h"
 #include "Kismet/KismetMathLibrary.h"
+#include "DelaunayLibrary.h"
 
 // Sets default values
 ARoomGenerator::ARoomGenerator()
@@ -12,7 +13,9 @@ ARoomGenerator::ARoomGenerator()
 
 }
 
-void ARoomGenerator::generaterooms()
+
+
+void ARoomGenerator::GenerateHallways()
 {
 }
 
@@ -21,24 +24,47 @@ void ARoomGenerator::BeginPlay()
 {
 	Super::BeginPlay();
 
+	FVector genloc = GetActorLocation();
+
 	UWorld* w = GetWorld();
 	FActorSpawnParameters asp;
 	asp.Owner = this;
-	asp.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButDontSpawnIfColliding;
+	asp.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;// AdjustIfPossibleButDontSpawnIfColliding;
+
 	if(w)
 	for (int i = 0; i < rooms_num; i++)
 	{
-		int rd = FMath::RandRange(0,1);
-		FVector2D v = FMath::RandPointInCircle(radius);
-		/*FString str = FString::SanitizeFloat(v.X).Append(FString::SanitizeFloat(v.Y));
-		FText::FromString(str);*/
-		ARoom* r = w->SpawnActor<ARoom>(roomref, FVector(v.X, v.Y, 100.),GetActorRotation(),asp);
 		
-		if (!r) // pour être sûr qu'il y ait le nb souhaité de spawn
-			rooms_num++;
+		FVector2D v = FMath::RandPointInCircle(radius);
+		int length = FMath::RandRange(1, 3);
+		int width = FMath::RandRange(1, 3);
+		ARoom* r = w->SpawnActor<ARoom>(roomref, FVector(genloc.X+v.X, genloc.Y+v.Y, 100.),GetActorRotation(),asp);
+		r->setsize(length, width);
+		
+	if(r->isabigroom) 
+	{
+		// store all main rooms
+		centers.Add(FVector2D(r->GetActorLocation().X, r->GetActorLocation().Y));
+	}
 
+	}
+	
+	TArray<FTriangle> triangles = UDelaunayLibrary::TriangulateDelaunay(centers);
+    for (auto& t : triangles)
+	{
+		DrawDebugLine(GetWorld(), FVector(centers[t.A].X, centers[t.A].Y, 200.), 
+			FVector(centers[t.B].X, centers[t.B].Y, 200.), FColor::Cyan,false,5.,10.);
+		DrawDebugLine(GetWorld(), FVector(centers[t.B].X, centers[t.B].Y, 200.),
+			FVector(centers[t.C].X, centers[t.C].Y, 200.), FColor::Cyan,false,5.,10.);
+		DrawDebugLine(GetWorld(), FVector(centers[t.C].X, centers[t.C].Y, 200.),
+			FVector(centers[t.A].X, centers[t.A].Y, 200.), FColor::Cyan,false,5.,10.);
+	}
 
-
+	TArray<FEdgeMST> edges = UDelaunayLibrary::BuildMinimumSpanningTree(centers, triangles);
+	for (auto& edge : edges)
+	{
+		DrawDebugLine(GetWorld(), FVector(centers[edge.A].X,centers[edge.A].Y,200.), 
+			FVector(centers[edge.B].X, centers[edge.B].Y, 200.), FColor::Yellow, false, 20., 10.);
 	}
 }
 

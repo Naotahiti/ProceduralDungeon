@@ -4,7 +4,6 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
-#include "StructForRoom.h"
 #include "Room.h"
 #include "RoomGenerator.generated.h"
 
@@ -17,19 +16,23 @@ public:
 	// Sets default values for this actor's properties
 	ARoomGenerator();
 
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(EditAnywhere) // number of rooms we want to spawn
 	int rooms_num;
 
-	void generaterooms();
 
 
-	UPROPERTY(EditAnywhere)
+
+	UPROPERTY(EditAnywhere) // room spawn radius
 	float radius;
 
 	UPROPERTY(EditAnywhere)
 	TSubclassOf<ARoom> roomref;
 
+	
 
+	TArray<FVector2D> centers;
+
+	void GenerateHallways();
 
 protected:
 	// Called when the game starts or when spawned

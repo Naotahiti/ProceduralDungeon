@@ -136,11 +136,11 @@ TArray<FTriangle> UDelaunayLibrary::TriangulateDelaunay(const TArray<FVector2D>&
 
     return FinalTriangles;
 }
-
+// points = room centers
 TArray<FEdgeMST> UDelaunayLibrary::BuildMinimumSpanningTree(const TArray<FVector2D>& Points, const TArray<FTriangle>& Triangles)
 
     {
-        // construire une liste d’arêtes uniques issues de la triangulation
+        // edges from triangulation
         struct FWeightedEdge
         {
             int32 A, B;
