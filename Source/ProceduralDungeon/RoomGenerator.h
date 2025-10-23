@@ -22,8 +22,6 @@ public:
 
 	void generaterooms();
 
-	UPROPERTY(EditAnywhere)
-	TArray<FStructForRoom> roomstruct;
 
 	UPROPERTY(EditAnywhere)
 	float radius;

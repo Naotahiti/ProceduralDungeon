@@ -24,7 +24,7 @@ void ARoomGenerator::BeginPlay()
 	UWorld* w = GetWorld();
 	FActorSpawnParameters asp;
 	asp.Owner = this;
-	asp.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
+	asp.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButDontSpawnIfColliding;
 	if(w)
 	for (int i = 0; i < rooms_num; i++)
 	{
@@ -33,7 +33,12 @@ void ARoomGenerator::BeginPlay()
 		/*FString str = FString::SanitizeFloat(v.X).Append(FString::SanitizeFloat(v.Y));
 		FText::FromString(str);*/
 		ARoom* r = w->SpawnActor<ARoom>(roomref, FVector(v.X, v.Y, 100.),GetActorRotation(),asp);
-		r->initialize(roomstruct[rd]);
+		
+		if (!r) // pour être sûr qu'il y ait le nb souhaité de spawn
+			rooms_num++;
+
+
+
 	}
 }
 
